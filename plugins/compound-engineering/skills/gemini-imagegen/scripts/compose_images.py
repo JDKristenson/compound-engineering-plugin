@@ -20,9 +20,9 @@ import argparse
 import os
 import sys
 
-from PIL import Image
 from google import genai
 from google.genai import types
+from PIL import Image
 
 
 def compose_images(
@@ -48,7 +48,7 @@ def compose_images(
     """
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        raise EnvironmentError("GEMINI_API_KEY environment variable not set")
+        raise OSError("GEMINI_API_KEY environment variable not set")
     
     if len(image_paths) > 14:
         raise ValueError("Maximum 14 reference images supported")

@@ -27,9 +27,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from PIL import Image
 from google import genai
 from google.genai import types
+from PIL import Image
 
 
 class ImageChat:
@@ -42,7 +42,7 @@ class ImageChat:
     ):
         api_key = os.environ.get("GEMINI_API_KEY")
         if not api_key:
-            raise EnvironmentError("GEMINI_API_KEY environment variable not set")
+            raise OSError("GEMINI_API_KEY environment variable not set")
         
         self.client = genai.Client(api_key=api_key)
         self.model = model

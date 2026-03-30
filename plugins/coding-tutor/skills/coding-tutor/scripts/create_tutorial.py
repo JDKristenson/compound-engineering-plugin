@@ -196,7 +196,7 @@ def main():
     try:
         filepath = create_tutorial(args.topic, args.concepts, args.output_dir)
         print(f"Created tutorial template: {filepath}")
-        print(f"Edit the file to add content and update the frontmatter")
+        print("Edit the file to add content and update the frontmatter")
         return 0
     except Exception as e:
         print(f"Error creating tutorial: {e}", file=sys.stderr)

@@ -18,9 +18,9 @@ import argparse
 import os
 import sys
 
-from PIL import Image
 from google import genai
 from google.genai import types
+from PIL import Image
 
 
 def edit_image(
@@ -46,7 +46,7 @@ def edit_image(
     """
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        raise EnvironmentError("GEMINI_API_KEY environment variable not set")
+        raise OSError("GEMINI_API_KEY environment variable not set")
     
     if not os.path.exists(input_path):
         raise FileNotFoundError(f"Input image not found: {input_path}")

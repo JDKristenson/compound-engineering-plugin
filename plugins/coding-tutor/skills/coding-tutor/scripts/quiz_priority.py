@@ -9,8 +9,8 @@ Returns tutorials ordered by quiz urgency (most urgent first).
 """
 
 import argparse
+import contextlib
 import re
-import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -61,10 +61,8 @@ def parse_frontmatter(filepath):
                 value = None
             # Convert understanding_score to int
             elif key == 'understanding_score' and value:
-                try:
+                with contextlib.suppress(ValueError):
                     value = int(value)
-                except ValueError:
-                    pass
             # Handle list values for concepts
             elif key == 'concepts' and value.startswith('['):
                 value = value.strip('[]').strip()

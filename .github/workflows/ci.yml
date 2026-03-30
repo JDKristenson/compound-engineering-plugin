@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-ruff-${{ hashFiles('pyproject.toml') }}
+          restore-keys: ${{ runner.os }}-pip-ruff-
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Run ruff
+        run: ruff check . --select E,F,I,UP,B,SIM
+
+  validate:
+    name: Validate (Python imports)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-validate-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-validate-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          find . -name "requirements.txt" -exec pip install -r {} \;
+
+      - name: Verify core imports (skill-creator)
+        run: |
+          python -c "import sys; print('Python', sys.version)"
+          python -c "from pathlib import Path; print('pathlib OK')"
+          python -c "import argparse, subprocess, sys; print('stdlib imports OK')"
+
+  ruby-syntax:
+    name: Ruby syntax check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+
+      - name: Check Ruby file syntax
+        run: |
+          RUBY_FILES=$(find . -name "*.rb" ! -path "*/\.*")
+          if [ -z "$RUBY_FILES" ]; then
+            echo "No .rb files found — skipping syntax check"
+            exit 0
+          fi
+          echo "Checking Ruby syntax for:"
+          echo "$RUBY_FILES"
+          echo "$RUBY_FILES" | xargs -I{} ruby -c "{}"

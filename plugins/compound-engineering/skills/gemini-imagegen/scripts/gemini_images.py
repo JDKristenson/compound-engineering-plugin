@@ -18,10 +18,9 @@ import os
 from pathlib import Path
 from typing import Literal
 
-from PIL import Image
 from google import genai
 from google.genai import types
-
+from PIL import Image
 
 AspectRatio = Literal["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9"]
 ImageSize = Literal["1K", "2K", "4K"]
@@ -43,7 +42,7 @@ class GeminiImageGenerator:
         """
         self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
         if not self.api_key:
-            raise EnvironmentError("GEMINI_API_KEY not set")
+            raise OSError("GEMINI_API_KEY not set")
         
         self.client = genai.Client(api_key=self.api_key)
         self.model = model

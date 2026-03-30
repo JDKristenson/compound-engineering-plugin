@@ -10,9 +10,9 @@ Usage:
 """
 
 import argparse
+import contextlib
 import json
 import re
-import subprocess
 import sys
 from pathlib import Path
 
@@ -55,10 +55,8 @@ def extract_frontmatter(filepath):
                 if value == 'null' or not value:
                     value = None
                 else:
-                    try:
+                    with contextlib.suppress(ValueError):
                         value = int(value)
-                    except ValueError:
-                        pass
 
             # Handle null values for last_quizzed
             if key == 'last_quizzed' and value == 'null':
@@ -136,7 +134,7 @@ def format_human_readable(tutorials):
             output.append(f"   Description: {tutorial['description']}")
         score = tutorial['understanding_score']
         if score is None:
-            output.append(f"   Understanding: not quizzed yet")
+            output.append("   Understanding: not quizzed yet")
         else:
             output.append(f"   Understanding: {score}/10")
         if tutorial.get('last_quizzed'):
