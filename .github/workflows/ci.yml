@@ -33,7 +33,7 @@ jobs:
         run: pip install ruff
 
       - name: Run ruff
-        run: ruff check . --select E,F,I,UP,B,SIM
+        run: ruff check .
 
   validate:
     name: Validate (Python imports)
