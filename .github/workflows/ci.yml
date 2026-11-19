@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   lint:
-    name: Lint (ruff)
+    name: Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -36,7 +36,7 @@ jobs:
         run: ruff check .
 
   validate:
-    name: Validate (Python imports)
+    name: Validate
     runs-on: ubuntu-latest
 
     steps:
